@@ -7,25 +7,36 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,9 +60,47 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Conversation(messages: List<Message>) {
-    LazyColumn {
-        items(messages) { message ->
-            MessageCard(message)
+    val count = rememberSaveable { mutableStateOf(0) }
+    Column(modifier = Modifier.fillMaxHeight()) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            items(messages) { message ->
+                MessageCard(message)
+            }
+        }
+        Counter(
+            count = count,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
+}
+
+
+@Composable
+fun Counter(count: MutableState<Int>, modifier: Modifier) {
+    Box(modifier) {
+        FloatingActionButton(
+            onClick = { count.value++ },
+            contentColor = Color.White,
+            backgroundColor = MaterialTheme.colors.primary,
+        ) {
+            Icon(Icons.Filled.Add, "increase counter")
+        }
+
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            elevation = 1.dp,
+            color = MaterialTheme.colors.surface,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(1.dp),
+        ) {
+            Text(
+                text = "Clicked ${count.value} times",
+                modifier = Modifier.padding(all = 4.dp),
+                style = MaterialTheme.typography.body2,
+            )
         }
     }
 }
@@ -85,7 +134,9 @@ fun MessageCard(message: Message) {
                 shape = MaterialTheme.shapes.medium,
                 elevation = 1.dp,
                 color = surfaceColor,
-                modifier = Modifier.animateContentSize().padding(1.dp),
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(1.dp),
             ) {
                 Text(
                     text = message.body,
@@ -101,10 +152,12 @@ fun MessageCard(message: Message) {
 @Preview(
     name = "Light Mode",
     showBackground = true,
+    showSystemUi = true,
 )
 @Preview(
     name = "Dark Mode",
     showBackground = true,
+    showSystemUi = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable

@@ -1,4 +1,4 @@
-package com.luizalabs.pmob.compose01.ui.theme
+package com.tutuland.compose01.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

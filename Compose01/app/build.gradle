@@ -7,7 +7,7 @@ android {
     compileSdk 30
 
     defaultConfig {
-        applicationId "com.luizalabs.pmob.compose01"
+        applicationId "com.tutuland.compose01"
         minSdk 22
         targetSdk 30
         versionCode 1

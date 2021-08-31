@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -26,12 +28,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tutuland.compose02.ui.theme.Compose02Theme
 import kotlinx.coroutines.launch
+import okhttp3.internal.http2.Header
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -42,6 +47,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun LayoutScaffold() {
     Scaffold(
@@ -60,6 +66,7 @@ fun LayoutScaffold() {
     ) { innerPadding -> BodyContent(Modifier.padding(innerPadding)) }
 }
 
+@ExperimentalFoundationApi
 @Preview(
     name = "Light Mode",
     showBackground = true,
@@ -76,16 +83,32 @@ fun LayoutScaffoldPreview() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun BodyContent(modifier: Modifier = Modifier) {
-    val listSize = 100
+    val listSize = 10
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier.fillMaxWidth()) {
         LazyColumn(Modifier.weight(1f), state = scrollState) {
+            stickyHeader {
+                Header("ITEMS!")
+            }
             items(count = listSize) { index ->
                 ImageListItem(index = index)
+            }
+            stickyHeader {
+                Header("MORE ITEMS!")
+            }
+            items(count = listSize) { index ->
+                ImageListItem(index = index+listSize)
+            }
+            stickyHeader {
+                Header("SOOOO MANY ITEMS!")
+            }
+            items(count = listSize) { index ->
+                ImageListItem(index = index+listSize+listSize)
             }
         }
 
@@ -103,10 +126,22 @@ fun BodyContent(modifier: Modifier = Modifier) {
             }
             Spacer(Modifier.width(16.dp))
             Button(onClick = {
-                coroutineScope.launch { scrollState.animateScrollToItem(listSize - 1) }
+                coroutineScope.launch { scrollState.animateScrollToItem(3*listSize - 1) }
             }) {
                 Text(text = "to the botton")
             }
         }
     }
+}
+
+@Composable
+fun Header(text: String) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray)
+            .padding(8.dp),
+        textAlign = TextAlign.Center
+    )
 }

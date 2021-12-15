@@ -11,7 +11,7 @@
         android:exported="true"
         android:theme="@style/Theme.ComposeState">
         <activity
-            android:name=".TodoActivity"
+            android:name=".todo.TodoActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ComposeState.NoActionBar">
@@ -21,12 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".examples.HelloCodelabActivity"
-            android:exported="true"
-            />
-        <activity android:name=".examples.HelloCodeLabActivityWithViewModel"
-            android:exported="true"
-            />
+        <activity
+            android:name=".examples.HelloCodelabActivity"
+            android:exported="true" />
+        <activity
+            android:name=".examples.HelloCodeLabActivityWithViewModel"
+            android:exported="true" />
     </application>
 
 </manifest>

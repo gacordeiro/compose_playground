@@ -1,0 +1,2 @@
+rootProject.name = "ComposeAnimation"
+include ':finished', ':start'
